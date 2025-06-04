@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Linux 命令文档</title>
+    <title>学习笔记</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         * {
@@ -73,14 +73,17 @@
             background-color: #3498db;
             border-left-color: #2980b9;
         }
-
-        .file-item .icon {
-            margin-right: 10px;
-            font-size: 1.1em;
+        
+        .module-item {
+            font-weight: 600;
         }
-
-        .file-item .name {
-            font-weight: 500;
+        
+        .module-category {
+            padding: 10px 15px;
+            color: #bdc3c7;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .main-content {
@@ -225,85 +228,178 @@
 <body>
     <div class="container">        <div class="sidebar">
             <div class="sidebar-header">
-                <h1 id="homeButton">📚 Linux 命令</h1>
-                <p>文档列表</p>
+                <h1 id="homeButton">📚 学习笔记</h1>
+                <p>笔记模块</p>
             </div>
-            <div class="file-list" id="fileList">
+            <div class="module-list" id="moduleList">
+                <!-- 模块列表将在这里动态生成 -->
+            </div>
+            <div class="file-list" id="fileList" style="display: none;">
                 <!-- 文件列表将在这里动态生成 -->
             </div>
         </div>
         
-        <div class="main-content">
-            <div class="content-header">
-                <h2 id="contentTitle">欢迎使用 Linux 命令文档</h2>
-                <div class="breadcrumb" id="breadcrumb">请选择左侧的文档查看内容</div>
+        <div class="main-content">            <div class="content-header">
+                <h2 id="contentTitle">欢迎使用学习笔记</h2>
+                <div class="breadcrumb" id="breadcrumb">请选择左侧的模块和笔记查看内容</div>
             </div>
             <div class="content-body">
                 <div id="markdownContent" class="markdown-content">
                     <div class="welcome-message">
-                        <h2>🚀 欢迎使用 Linux 命令文档</h2>
-                        <p>请从左侧列表中选择一个文档开始阅读</p>
-                        <p>当前可用文档：</p>
+                        <h2>🚀 欢迎使用学习笔记</h2>
+                        <p>请从左侧列表中选择一个模块和笔记开始阅读</p>
+                        <p>当前可用模块：</p>
                         <ul style="text-align: left; display: inline-block; margin-top: 20px;">
-                            <li>systemd.md - systemctl 完整参数列表</li>
+                            <li>Linux - Linux相关笔记和命令</li>
+                            <li>HTML - HTML学习笔记</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <script>
-        // 模拟的文件列表（在实际项目中，这些数据可能来自服务器）
-        const files = [
+    </div>    <script>
+        // 学习笔记模块
+        const modules = [
             {
-                name: 'systemd.md',
-                title: 'systemctl 命令',
-                path: 'src/systemd.md',
-                icon: '⚙️'
+                id: 'linux',
+                name: 'Linux',
+                icon: '🐧',
+                description: 'Linux相关笔记和命令'
+            },
+            {
+                id: 'html',
+                name: 'HTML',
+                icon: '📄',
+                description: 'HTML学习笔记'
             }
-            // 可以在这里添加更多文件
-        ];
-
+            // 可以在这里添加更多模块
+        ];        // 模块内文件列表
+        const moduleFiles = {
+            'linux': [
+                {
+                    name: 'systemd.md',
+                    title: 'systemctl 命令',
+                    path: 'src/linux/systemd.md',
+                    icon: '⚙️'
+                }
+                // 可以在这里添加更多Linux相关文件
+            ],
+            'html': [
+                {
+                    name: 'basics.md',
+                    title: 'HTML 基础知识',
+                    path: 'src/html/basics.md',
+                    icon: '📝'
+                }
+                // 可以在这里添加更多HTML相关文件
+            ]
+            // 可以为其他模块添加文件
+        };let currentModule = null;
         let currentFile = null;
 
         // 返回首页
         function goHome() {
-            // 重置所有文件项的激活状态
-            document.querySelectorAll('.file-item').forEach(item => {
+            // 重置所有模块和文件项的激活状态
+            document.querySelectorAll('.module-item, .file-item').forEach(item => {
                 item.classList.remove('active');
             });
             
-            // 重置标题和面包屑
-            document.getElementById('contentTitle').textContent = '欢迎使用 Linux 命令文档';
-            document.getElementById('breadcrumb').textContent = '请选择左侧的文档查看内容';
+            // 显示模块列表，隐藏文件列表
+            document.getElementById('moduleList').style.display = 'block';
+            document.getElementById('fileList').style.display = 'none';
             
-            // 显示欢迎页面
+            // 重置标题和面包屑
+            document.getElementById('contentTitle').textContent = '欢迎使用学习笔记';
+            document.getElementById('breadcrumb').textContent = '请选择左侧的模块和笔记查看内容';
+              // 显示欢迎页面
             document.getElementById('markdownContent').innerHTML = `
                 <div class="welcome-message">
-                    <h2>🚀 欢迎使用 Linux 命令文档</h2>
-                    <p>请从左侧列表中选择一个文档开始阅读</p>
-                    <p>当前可用文档：</p>
+                    <h2>🚀 欢迎使用学习笔记</h2>
+                    <p>请从左侧列表中选择一个模块和笔记开始阅读</p>
+                    <p>当前可用模块：</p>
                     <ul style="text-align: left; display: inline-block; margin-top: 20px;">
-                        <li>systemd.md - systemctl 完整参数列表</li>
+                        <li>Linux - Linux相关笔记和命令</li>
+                        <li>HTML - HTML学习笔记</li>
                     </ul>
                 </div>
             `;
             
-            // 清除当前文件状态
+            // 清除当前状态
+            currentModule = null;
             currentFile = null;
             
             // 清除URL hash
             if (window.location.hash) {
                 history.pushState("", document.title, window.location.pathname + window.location.search);
             }
+        }        // 渲染模块列表
+        function renderModuleList() {
+            const moduleList = document.getElementById('moduleList');
+            moduleList.innerHTML = '';
+            
+            modules.forEach(module => {
+                const moduleItem = document.createElement('div');
+                moduleItem.className = 'file-item module-item';
+                moduleItem.innerHTML = `
+                    <span class="icon">${module.icon}</span>
+                    <span class="name">${module.name}</span>
+                `;
+                moduleItem.addEventListener('click', () => loadModule(module));
+                moduleList.appendChild(moduleItem);
+            });
         }
-
-        // 渲染文件列表
-        function renderFileList() {
+        
+        // 加载模块
+        function loadModule(module) {
+            // 更新UI状态
+            document.querySelectorAll('.module-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // 显示文件列表，隐藏模块列表
+            document.getElementById('moduleList').style.display = 'none';
+            document.getElementById('fileList').style.display = 'block';
+            
+            // 更新标题和面包屑
+            document.getElementById('contentTitle').textContent = `${module.name} 笔记`;
+            document.getElementById('breadcrumb').textContent = `${module.name} / 请选择笔记`;
+            
+            // 显示模块欢迎信息
+            document.getElementById('markdownContent').innerHTML = `
+                <div class="welcome-message">
+                    <h2>${module.icon} ${module.name} 模块</h2>
+                    <p>${module.description}</p>
+                    <p>请从左侧列表中选择一个笔记开始阅读</p>
+                    ${moduleFiles[module.id].length === 0 ? '<p><i>此模块暂无笔记</i></p>' : ''}
+                </div>
+            `;
+            
+            currentModule = module;
+            currentFile = null;
+            
+            // 渲染模块中的文件列表
+            renderModuleFileList(module.id);
+        }
+        
+        // 渲染指定模块的文件列表
+        function renderModuleFileList(moduleId) {
             const fileList = document.getElementById('fileList');
             fileList.innerHTML = '';
             
+            // 添加返回按钮
+            const backButton = document.createElement('div');
+            backButton.className = 'file-item';
+            backButton.style.backgroundColor = '#34495e';
+            backButton.innerHTML = `
+                <span class="icon">⬅️</span>
+                <span class="name">返回模块列表</span>
+            `;
+            backButton.addEventListener('click', goHome);
+            fileList.appendChild(backButton);
+            
+            // 添加文件列表
+            const files = moduleFiles[moduleId] || [];
             files.forEach(file => {
                 const fileItem = document.createElement('div');
                 fileItem.className = 'file-item';
@@ -311,27 +407,32 @@
                     <span class="icon">${file.icon}</span>
                     <span class="name">${file.title}</span>
                 `;
-                fileItem.addEventListener('click', () => loadFile(file));
+                fileItem.addEventListener('click', () => loadFile(file, moduleId));
                 fileList.appendChild(fileItem);
             });
-        }
-
-        // 加载文件内容
-        async function loadFile(file) {
+        }        // 加载文件内容
+        async function loadFile(file, moduleId) {
             try {
+                // 获取模块信息
+                const module = modules.find(m => m.id === moduleId);
+                if (!module) {
+                    throw new Error('模块不存在');
+                }
+                
                 // 更新UI状态
                 document.querySelectorAll('.file-item').forEach(item => {
                     item.classList.remove('active');
                 });
                 event.currentTarget.classList.add('active');
-                  // 更新标题和面包屑
+                
+                // 更新标题和面包屑
                 document.getElementById('contentTitle').textContent = file.title;
-                document.getElementById('breadcrumb').textContent = file.name;
+                document.getElementById('breadcrumb').textContent = `${module.name} / ${file.name}`;
                 
                 // 显示加载状态
                 document.getElementById('markdownContent').innerHTML = `
                     <div class="loading">
-                        <h2>📖 正在加载文档...</h2>
+                        <h2>📖 正在加载笔记...</h2>
                         <p>请稍候</p>
                     </div>
                 `;
@@ -362,7 +463,7 @@
             }
         }        // 初始化页面
         function init() {
-            renderFileList();
+            renderModuleList();
             
             // 添加首页按钮点击事件
             document.getElementById('homeButton').addEventListener('click', goHome);
@@ -370,9 +471,27 @@
             // 如果URL中有hash，尝试加载对应文件
             const hash = window.location.hash.substr(1);
             if (hash) {
-                const file = files.find(f => f.name === hash);
-                if (file) {
-                    loadFile(file);
+                // 格式：模块ID/文件名
+                const parts = hash.split('/');
+                if (parts.length === 2) {
+                    const moduleId = parts[0];
+                    const fileName = parts[1];
+                    const module = modules.find(m => m.id === moduleId);
+                    if (module) {
+                        const file = moduleFiles[moduleId].find(f => f.name === fileName);
+                        if (file) {
+                            // 先加载模块，再加载文件
+                            loadModule(module);
+                            loadFile(file, moduleId);
+                            return;
+                        }
+                    }
+                }
+                
+                // 如果不是模块/文件格式，尝试只加载模块
+                const module = modules.find(m => m.id === hash);
+                if (module) {
+                    loadModule(module);
                 }
             }
         }
@@ -383,10 +502,30 @@
         // 监听浏览器后退/前进按钮
         window.addEventListener('hashchange', () => {
             const hash = window.location.hash.substr(1);
-            if (hash) {
-                const file = files.find(f => f.name === hash);
+            if (!hash) {
+                goHome();
+                return;
+            }
+            
+            // 尝试解析模块/文件格式
+            const parts = hash.split('/');
+            if (parts.length === 2) {
+                const moduleId = parts[0];
+                const fileName = parts[1];
+                const module = modules.find(m => m.id === moduleId);
+                if (module && (!currentModule || currentModule.id !== moduleId)) {
+                    loadModule(module);
+                }
+                
+                const file = moduleFiles[moduleId]?.find(f => f.name === fileName);
                 if (file && file !== currentFile) {
-                    loadFile(file);
+                    loadFile(file, moduleId);
+                }
+            } else {
+                // 只有模块
+                const module = modules.find(m => m.id === hash);
+                if (module && (!currentModule || currentModule.id !== hash)) {
+                    loadModule(module);
                 }
             }
         });
