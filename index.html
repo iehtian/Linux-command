@@ -265,6 +265,7 @@
               >
                 <li>Linux - Linux相关笔记和命令</li>
                 <li>HTML - HTML学习笔记</li>
+                <li>其他 - 其他技术笔记</li>
               </ul>
             </div>
           </div>
@@ -285,6 +286,12 @@
           name: "HTML",
           icon: "📄",
           description: "HTML学习笔记",
+        },
+        {
+          id: "others",
+          name: "其他",
+          icon: "🔧",
+          description: "其他技术笔记",
         },
         // 可以在这里添加更多模块
       ]; // 模块内文件列表
@@ -331,6 +338,15 @@
           },
           // 可以在这里添加更多HTML相关文件
         ],
+        others: [
+          {
+            name: "docker无法连接仓库解决办法.md",
+            title: "Docker无法连接仓库解决办法",
+            path: "src/others/docker无法连接仓库解决办法.md",
+            icon: "🐳",
+          },
+          // 可以在这里添加更多其他相关文件
+        ],
         // 可以为其他模块添加文件
       };
       let currentModule = null;
@@ -363,6 +379,7 @@
                     <ul style="text-align: left; display: inline-block; margin-top: 20px;">
                         <li>Linux - Linux相关笔记和命令</li>
                         <li>HTML - HTML学习笔记</li>
+                        <li>其他 - 其他技术笔记</li>
                     </ul>
                 </div>
             `;
